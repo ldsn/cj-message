@@ -13,7 +13,7 @@ $rs = mysql_query($q, $dbh);
 while( $row = mysql_fetch_array($rs) ){
 	if($row['count'] == 0){
 		$err_fp = fopen('err_log.txt','a');
-                fwrite($err_fp,"{error:'111',data:'message over'}\n");
+                fwrite($err_fp,"{error:'111',data:'message over',time:'".date("Y-m-d H:i:s", time())."',user:'". $row['user_id'] ."'}\n");
                 fclose($err_fp);
 		mysql_query("INSERT  INTO  over  (user_id, pass, cj_data) SELECT user_id, pass, cj_data FROM user WHERE id ='". $row['id']."'",$dbh);
 		mysql_query("DELETE FROM user WHERE id = '".$row['id']."'");
@@ -32,7 +32,7 @@ while( $row = mysql_fetch_array($rs) ){
 	//如果接到错误 打到log 里，并进行下一个循环
 	if ($error != 0) {
 		$err_fp = fopen('err_log.txt','a');
-		fwrite($err_fp,$json_server."\n");
+		fwrite($err_fp,$json_server."+{time:'".date("Y-m-d H:i:s", time())."',user:'". $row['user_id'] ."'}\n");
 		fclose($err_fp);
 		continue;
 	}
