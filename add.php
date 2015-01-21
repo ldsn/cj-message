@@ -20,10 +20,9 @@
 		return;
 	}
 	//$cj_data = str_replace('\\', '\\\\', $cj_data);
-	$dbh = mysql_connect("127.0.0.1:3306","root","8641683");
+	$dbh = mysql_connect($_SERVER['SQL_HOST'],$_SERVER['SQL_USER'],$_SERVER['SQL_PASSWORD']);
 	if(!$dbh){die("error");}
-	mysql_select_db("cj", $dbh);
-
+	mysql_select_db($_SERVER['SQL_DBNAME'], $dbh);
 
 
 	$sql = sprintf(

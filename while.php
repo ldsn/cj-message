@@ -1,7 +1,7 @@
 <?php
-$dbh = mysql_connect("127.0.0.1:3306","root","8641683"); 
+$dbh = mysql_connect($_SERVER['SQL_HOST'],$_SERVER['SQL_USER'],$_SERVER['SQL_PASSWORD']); 
 if(!$dbh){die("error");} 
-mysql_select_db("cj", $dbh); 
+mysql_select_db($_SERVER['SQL_DBNAME'], $dbh); 
 $q = "select * from user"; 
 ignore_user_abort();
 set_time_limit(0); 
@@ -59,13 +59,39 @@ while( $row = mysql_fetch_array($rs) ){
 
 		//如果成绩改变 要干的事情，未来改成发送短信
 		if($status == false){
-			$message = "学科:".$kc_mysql[$kch]['kcm']."由:".$kc_mysql[$kch]['cj']." 更新到:" . $kc_server[$kch]['cj'].'<br />';
+			//$message = "学科:".$kc_mysql[$kch]['kcm']."由:".$kc_mysql[$kch]['cj']." 更新到:" . $kc_server[$kch]['cj'].'<br />';
 
-			$fp = fopen('sc.html','a');
-			fwrite($fp,$message);
-			fclose($fp);
+			//$fp = fopen('sc.html','a');
+			//fwrite($fp,$message);
+			//fclose($fp);
+			$change_kcm = $kc_mysql[$kch]['kcm'];
+			$change_cj = $kc_server[$kch]['cj'];
+			$phone = $row['phone'];
+	
+		$value = urlencode("#kcm#=".$change_kcm."&#score#=".$change_cj);
+                
+		$url='http://yunpian.com/v1/sms/tpl_send.json';
+                $post="apikey=0d679b8688ff199c06196328e578eeae&mobile=$phone&tpl_id=672359&tpl_value=$value";
+                $ch = curl_init($url);
+                curl_setopt($ch,CURLOPT_HEADER,0);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1) ;
+                curl_setopt($ch, CURLOPT_POST,1) ;
+                curl_setopt($ch, CURLOPT_POSTFIELDS,$post);
+                $message_result = curl_exec($ch);
+                curl_close($ch);
+                $json_message_result = json_decode($message_result,true);
+                $error = $json_message_result['code'];
+                if ($error != 0){
+                        $result = array(
+                                'error' => $error,
+                                'data' => $json_message_result['msg'],
+                                'detail' => $json_message_result['detail']
+                        );
+                        echo json_encode($result);
+                        return;
+                }
+
 			$change = true;
-			echo '1/n';
 		}
 	}
 	//转移范斜杠 存数据的时候防止被吃掉
