@@ -7,10 +7,18 @@ ignore_user_abort();
 set_time_limit(0); 
 $interval=2; 
 //一直循环数据库里的内容 把 n 条记录取出 然后每个人的每门成绩进行对比
-//do{
+do{
 $rs = mysql_query($q, $dbh); 
 //下面这个循环是针对一个人的
 while( $row = mysql_fetch_array($rs) ){
+	if($row['count'] == 0){
+		$err_fp = fopen('err_log.txt','a');
+                fwrite($err_fp,"{error:'111',data:'message over'}\n");
+                fclose($err_fp);
+		mysql_query("INSERT  INTO  over  (user_id, pass, cj_data) SELECT user_id, pass, cj_data FROM user WHERE id ='". $row['id']."'",$dbh);
+		mysql_query("DELETE FROM user WHERE id = '".$row['id']."'");
+		continue;
+	}
 	$json_mysql = $row['cj_data'];
 	$old_arr = json_decode($json_mysql,true);
 	$arr_mysql  = $old_arr["score"];
@@ -24,7 +32,7 @@ while( $row = mysql_fetch_array($rs) ){
 	//如果接到错误 打到log 里，并进行下一个循环
 	if ($error != 0) {
 		$err_fp = fopen('err_log.txt','a');
-		fwrite($err_fp,$json_server);
+		fwrite($err_fp,$json_server."\n");
 		fclose($err_fp);
 		continue;
 	}
@@ -39,9 +47,6 @@ while( $row = mysql_fetch_array($rs) ){
 		$kc_mysql[$kch]['kcm'] = $arr_mysql[$i]['kcm'];
 
 	}
-
-var_dump($kc_server);
-var_dump($kc_mysql);
 
 	for($i=0;$i<sizeof($arr_server);$i++){
 		$kch = $arr_server[$i]['kch'];
@@ -59,16 +64,20 @@ var_dump($kc_mysql);
 			$fp = fopen('sc.html','a');
 			fwrite($fp,$message);
 			fclose($fp);
+			$change = true;
+			echo '1/n';
 		}
 	}
 	//转移范斜杠 存数据的时候防止被吃掉
-	$json_server = str_replace("\\", "\\\\", $json_server);
-
-	mysql_query("update user set cj_data = '".$json_server."' where id = '".$row['id']."'");
+	if(isset($change)){
+		$json_server = str_replace("\\", "\\\\", $json_server);
+		mysql_query("update user set cj_data = '".$json_server."', count = count-1 where id = '".$row['id']."'");
+		unset($change);
+	}
 	sleep($interval);
 }
 
 
-//}while(true);
+}while(true);
 
 ?>
