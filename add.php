@@ -62,6 +62,17 @@
                         return;
                 }
 	$sql = sprintf(
+                "select * from youhui where xh = '%s'",
+                mysql_real_escape_string($xh)
+        );
+
+        $has = mysql_query($sql,$dbh);
+        $has_count = mysql_num_rows($has);
+
+        if($has_count != 0){
+		$count += 2;
+        }
+	$sql = sprintf(
 		"insert into %s (user_id, pass, phone, cj_data, count) values ('%s', '%s', '%s', '%s', %d)",
 		mysql_real_escape_string('user'),
 		mysql_real_escape_string($userid),
