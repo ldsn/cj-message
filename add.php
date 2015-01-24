@@ -21,7 +21,6 @@
 	}
 	//$cj_data = str_replace('\\', '\\\\', $cj_data);
 //	$dbh = mysql_connect($_SERVER['DB_HOST'],$_SERVER['DB_USER'],$_SERVER['DB_PASSWD']);
-$dbh = mysql_connect('localhost','cj','wangluobu@tw');
 	if(!$dbh){die("error");}
 	mysql_select_db('cj', $dbh);
 
