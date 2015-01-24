@@ -49,7 +49,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   `count` int(11) NOT NULL
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=49 ;
 
-
 --
 -- Indexes for dumped tables
 --
