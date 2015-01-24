@@ -32,6 +32,9 @@
 	    text-align: center;
 	    margin: 0 auto;
 	}
+	.unvalid {
+		background: #ccc;
+	}
 	</style>
 </head>
 <body>
@@ -74,6 +77,7 @@
 			if (data.error == 203){
 				alert('出现错误！这个问题非常严重，请联系范明非解决');
 			}
+			sub.className="submit";
 			
 		}
 		function submit() {
@@ -89,13 +93,14 @@
 				alert('请填写内容！');
 				return;
 			}	
-				
+			sub.className="submit unvalid";			
 			var post = "?userid=" + uid + "&password=" + passwd + "&phone=" + number + "&count=" + km;
 			xhr.open("post",url+post);
 			xhr.send();
 			localStorage.ourpass = pwd.value;
 		}
 		sub.onclick=function(){
+			if(sub.classList.contains('unvalid')) retrun;	
 			submit();
 		}
 		window.onkeydown = function (e) {
