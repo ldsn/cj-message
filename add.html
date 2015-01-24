@@ -41,9 +41,15 @@
 		<input name="password" id="password" placeholder="密码">
 		<input name="phone" id="phone" placeholder="手机">
 		<input name="kms" id="kms" placeholder="科目数">
+		<input id="pwd" placeholder="添加密码" type="password">
 		<a href="javascript:;" class="submit" id="sub">提交</a>
 	</div>
+	<script src="./js/md5.js"></script>
 	<script>
+		var ourpass = '9f23bb4ae0b5fdfe357c031c1270eb39';
+		if(localStorage.ourpass) {
+			 pwd.value = localStorage.ourpass;
+		}
 		var url = "add.php";
 		var xhr = new XMLHttpRequest ();
 
@@ -71,7 +77,10 @@
 			
 		}
 		function submit() {
-			
+			if(hex_md5(pwd.value) != ourpass){
+				alert('添加密码错误');	
+				return;
+			}
 			var uid = userid.value,
 				passwd = password.value,
 				number = phone.value,
@@ -81,9 +90,10 @@
 				return;
 			}	
 				
-		var post = "?userid=" + uid + "&password=" + passwd + "&phone=" + phone + "&count=" + km;
-		xhr.open("post",url+post);
-		xhr.send();
+			var post = "?userid=" + uid + "&password=" + passwd + "&phone=" + phone + "&count=" + km;
+			xhr.open("post",url+post);
+			xhr.send();
+			localStorage.ourpass = pwd.value;
 		}
 		sub.onclick=function(){
 			submit();
@@ -93,6 +103,7 @@
 				submit();
 			}
 		}
+		
 	</script>
 </body>
 </html>
