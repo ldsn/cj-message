@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+	<meta charset="UTF-8">
+	<title>添加</title>
+	<style>
+	.wrap {
+	    width: 300px;
+	    margin: 0 auto;
+	}
+
+	.wrap input {
+	    display: block;
+	    width: 300px;
+	    height: 34px;
+	    line-height: 34px;
+	    margin-bottom: 10px;
+	}
+	.title {
+		text-align: center;
+	}
+	.submit {
+	    width: 250px;
+	    height: 40px;
+	    display: block;
+	    background: #00f;
+	    color: #fff;
+	    font-weight: bold;
+	    text-decoration: none;
+	    line-height: 40px;
+	    text-align: center;
+	    margin: 0 auto;
+	}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<p class="title">信息录入</p>
+		<input name="userid" id="userid" placeholder="学号">
+		<input name="password" id="password" placeholder="密码">
+		<input name="phone" id="phone" placeholder="手机">
+		<input name="kms" id="kms" placeholder="科目数">
+		<a href="javascript:;" class="submit" id="sub">提交</a>
+	</div>
+	<script>
+		var url = "add.php";
+		var xhr = new XMLHttpRequest ();
+
+		xhr.onreadystatechange = function () {
+			if(xhr.readyState == 4){
+				if (xhr.status >= 200 && xhr.status < 400){
+					var data;
+					try{
+						data = JSON.parse(xhr.response);
+					}catch (e) {
+						data = xhr.response;
+					}
+					success(data);
+				}
+			}
+		}
+		function success(data) {
+			console.log(data);
+			if(data.error != 0){
+				alert(data.data);
+			}
+			if (data.error == 203){
+				alert('出现错误！这个问题非常严重，请联系范明非解决');
+			}
+			
+		}
+		function submit() {
+			
+			var uid = userid.value,
+				passwd = password.value,
+				number = phone.value,
+				km = kms.value;
+			if(!uid || !passwd || !number || !km){
+				alert('请填写内容！');
+				return;
+			}	
+				
+		var post = "?userid=" + uid + "&password=" + passwd + "&phone=" + phone + "&count=" + km;
+		xhr.open("post",url+post);
+		xhr.send();
+		}
+		sub.onclick=function(){
+			submit();
+		}
+		window.onkeydown = function (e) {
+			if(e.keyCode == 13){
+				submit();
+			}
+		}
+	</script>
+</body>
+</html>
