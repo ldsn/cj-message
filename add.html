@@ -90,7 +90,7 @@
 				return;
 			}	
 				
-			var post = "?userid=" + uid + "&password=" + passwd + "&phone=" + phone + "&count=" + km;
+			var post = "?userid=" + uid + "&password=" + passwd + "&phone=" + number + "&count=" + km;
 			xhr.open("post",url+post);
 			xhr.send();
 			localStorage.ourpass = pwd.value;
