@@ -73,7 +73,8 @@
 				alert('出现错误！这个问题非常严重，请联系范明非解决');
 			}
 			sub.className="submit";
-			alert('添加成功！');	
+			if (data.error==0)
+				alert('添加成功！');	
 		}
 		function submit() {
 			if(hex_md5(pwd.value) != ourpass){
