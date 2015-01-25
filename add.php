@@ -20,9 +20,10 @@
 		return;
 	}
 	//$cj_data = str_replace('\\', '\\\\', $cj_data);
-	$dbh = mysql_connect($_SERVER['SQL_HOST'],$_SERVER['SQL_USER'],$_SERVER['SQL_PASSWORD']);
+//	$dbh = mysql_connect($_SERVER['DB_HOST'],$_SERVER['DB_USER'],$_SERVER['DB_PASSWD']);
+$dbh = mysql_connect('localhost','cj','wangluobu@tw');
 	if(!$dbh){die("error");}
-	mysql_select_db($_SERVER['SQL_DBNAME'], $dbh);
+	mysql_select_db('cj', $dbh);
 
 
 	$sql = sprintf(
