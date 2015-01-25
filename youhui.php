@@ -19,7 +19,7 @@
                 echo json_encode($result);
                 return;
 	}
-//	$dbh = mysql_connect($_SERVER['DB_HOST'],$_SERVER['DB_USER'],$_SERVER['DB_PASSWORD']);
+	$dbh = mysql_connect($_SERVER['DB_HOST'],$_SERVER['DB_USER'],$_SERVER['DB_PASSWORD']);
 	
 	if(!$dbh){die("error");}
 	mysql_select_db('cj', $dbh);

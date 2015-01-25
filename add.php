@@ -20,7 +20,7 @@
 		return;
 	}
 	//$cj_data = str_replace('\\', '\\\\', $cj_data);
-//	$dbh = mysql_connect($_SERVER['DB_HOST'],$_SERVER['DB_USER'],$_SERVER['DB_PASSWD']);
+	$dbh = mysql_connect($_SERVER['DB_HOST'],$_SERVER['DB_USER'],$_SERVER['DB_PASSWD']);
 	if(!$dbh){die("error");}
 	mysql_select_db('cj', $dbh);
 
@@ -63,13 +63,11 @@
                 }
 	$sql = sprintf(
                 "select * from youhui where xh = '%s'",
-                mysql_real_escape_string($xh)
+                mysql_real_escape_string($userid)
         );
-
-        $has = mysql_query($sql,$dbh);
-        $has_count = mysql_num_rows($has);
-
-        if($has_count != 0){
+        $yh = mysql_query($sql,$dbh);
+        $youhui = mysql_num_rows($yh);
+        if($youhui!= 0){
 		$count += 2;
         }
 	$sql = sprintf(
