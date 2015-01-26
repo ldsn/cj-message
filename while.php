@@ -71,7 +71,7 @@ while( $row = mysql_fetch_array($rs) ){
 		$value = urlencode("#kcm#=".$change_kcm."&#score#=".$change_cj);
                 
 	        if($change_cj=="") {
-                        $value = urlencode("#kcm#=".$change_kcm."&#score#=重置");
+                        $value = urlencode("#kcm#=".$change_kcm."&#score#=成绩重置");
         	} 
 
 		$url='http://yunpian.com/v1/sms/tpl_send.json';
