@@ -1,5 +1,6 @@
 <?php
 //$dbh = mysql_connect($_SERVER['DB_HOST'],$_SERVER['DB_USER'],$_SERVER['DB_PASSWD']);
+$dbh=mysql_connect("localhost","cj","wangluobu@tw");
 if(!$dbh){die("error");} 
 mysql_select_db('cj', $dbh); 
 $q = "select * from user"; 
@@ -7,9 +8,14 @@ ignore_user_abort();
 set_time_limit(0); 
 $interval=2; 
 //一直循环数据库里的内容 把 n 条记录取出 然后每个人的每门成绩进行对比
+$item_count = 0;
 do{
 $rs = mysql_query($q, $dbh); 
 //下面这个循环是针对一个人的
+$item_count ++;
+$err_fp = fopen('check.txt','a');
+fwrite($err_fp,"{count:\"".$item_count."\",time:\"".date('Y-m-d H:i:s', time())."\"}\n");
+fclose($err_fp);
 while( $row = mysql_fetch_array($rs) ){
 	if($row['count'] == 0){
 		$err_fp = fopen('err_log.txt','a');
@@ -70,6 +76,10 @@ while( $row = mysql_fetch_array($rs) ){
 	
 		$value = urlencode("#kcm#=".$change_kcm."&#score#=".$change_cj);
                 
+		if($change_cj=="") {
+			$value = urlencode("#kcm#=".$change_kcm."&#score#=空");
+		} 
+		
 		$url='http://yunpian.com/v1/sms/tpl_send.json';
                 $post="apikey=0d679b8688ff199c06196328e578eeae&mobile=$phone&tpl_id=672359&tpl_value=$value";
                 $ch = curl_init($url);
@@ -87,8 +97,12 @@ while( $row = mysql_fetch_array($rs) ){
                                 'data' => $json_message_result['msg'],
                                 'detail' => $json_message_result['detail']
                         );
-                        echo json_encode($result);
-                        return;
+                        $err_data = json_encode($result);
+                	$err_fp = fopen('err_log.txt','a');
+               		fwrite($err_fp,$err_data."+{time:'".date("Y-m-d H:i:s", time())."',user:'". $row['user_id'] ."'}\n");
+                	fclose($err_fp);
+                	continue;
+			
                 }
 
 			$change = true;
