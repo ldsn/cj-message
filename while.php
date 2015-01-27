@@ -98,11 +98,10 @@ while( $row = mysql_fetch_array($rs) ){
                                 'detail' => $json_message_result['detail']
                         );
                         $err_data = json_encode($result);
-                	$err_fp = fopen('err_log.txt','a');
-               		fwrite($err_fp,$err_data."+{time:'".date("Y-m-d H:i:s", time())."',user:'". $row['user_id'] ."'}\n");
-                	fclose($err_fp);
-                	continue;
-			
+                        $err_fp = fopen('err_log.txt','a');
+                        fwrite($err_fp,$err_data."+{time:'".date("Y-m-d H:i:s", time())."',user:'". $row['user_id'] ."'}\n");
+                        fclose($err_fp);
+                       	continue;
                 }
 
 			$change = true;
