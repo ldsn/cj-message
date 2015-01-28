@@ -1,6 +1,6 @@
 <?php
 //$dbh = mysql_connect($_SERVER['DB_HOST'],$_SERVER['DB_USER'],$_SERVER['DB_PASSWD']);
-$dbh=mysql_connect("localhost","cj","wangluobu@tw");
+include('data.php');
 if(!$dbh){die("error");} 
 mysql_select_db('cj', $dbh); 
 $q = "select * from user"; 
@@ -9,16 +9,17 @@ set_time_limit(0);
 $interval=2; 
 //一直循环数据库里的内容 把 n 条记录取出 然后每个人的每门成绩进行对比
 $item_count = 0;
+$local = "/data/www/ldsn/cj-message/";
 do{
 $rs = mysql_query($q, $dbh); 
 //下面这个循环是针对一个人的
 $item_count ++;
-$err_fp = fopen('check.txt','a');
+$err_fp = fopen($local.'check.txt','a');
 fwrite($err_fp,"{count:\"".$item_count."\",time:\"".date('Y-m-d H:i:s', time())."\"}\n");
 fclose($err_fp);
 while( $row = mysql_fetch_array($rs) ){
 	if($row['count'] == 0){
-		$err_fp = fopen('err_log.txt','a');
+		$err_fp = fopen($local.'err_log.txt','a');
                 fwrite($err_fp,"{error:'111',data:'message over',time:'".date("Y-m-d H:i:s", time())."',user:'". $row['user_id'] ."'}\n");
                 fclose($err_fp);
 		mysql_query("INSERT  INTO  over  (user_id, pass, cj_data) SELECT user_id, pass, cj_data FROM user WHERE id ='". $row['id']."'",$dbh);

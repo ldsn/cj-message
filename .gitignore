@@ -1,2 +1,4 @@
-./err_log.txt
-./kdapi/err_log.txt
+err_log.txt
+kdapi/err_log.txt
+data.php
+check.txt

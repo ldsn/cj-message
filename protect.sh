@@ -1,6 +1,5 @@
-#!/bash/shell
-
-aa=$(ps -ef | grep 'php while.php' | wc -l)
+#!/bin/sh
+aa=$(ps -ef | grep '/usr/bin/php /data/www/ldsn/cj-message/while.php' | wc -l)
 if [ $aa -eq 0 ];then
-	php while.php &
+	/usr/bin/php /data/www/ldsn/cj-message/while.php &
 fi
